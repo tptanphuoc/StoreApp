@@ -36,6 +36,8 @@ public class OrderServiceImpl implements OrderService{
 	public Page<Order> findAll(Pageable pageable) {
 		return orderRepository.findAll(pageable);
 	}
+
+
 	@Override
 	public void deleteById(int id) {
 		orderRepository.deleteById(id);
@@ -48,5 +50,23 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<Order> findAllByPayment_Method(String payment_Method) {
 		return orderRepository.findAllByPayment_Method(payment_Method);
+	}
+
+	@Override
+	public void approveOrder(int orderId) {
+		Order order = orderRepository.findById(orderId);
+		if (order != null) {
+			order.setStatus("Approved");
+			orderRepository.save(order);
+		}
+	}
+
+	@Override
+	public void cancelOrder(int orderId) {
+		Order order = orderRepository.findById(orderId);
+		if (order != null) {
+			order.setStatus("Cancelled");
+			orderRepository.save(order);
+		}
 	}
 }

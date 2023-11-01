@@ -1,15 +1,9 @@
 package StoreApp.StoreApp.controller;
 
-import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,14 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import StoreApp.StoreApp.entity.Category;
 import StoreApp.StoreApp.entity.Order;
 import StoreApp.StoreApp.entity.Order_Item;
 import StoreApp.StoreApp.entity.Product;
-import StoreApp.StoreApp.entity.ProductImage;
 import StoreApp.StoreApp.entity.User;
 import StoreApp.StoreApp.model.Mail;
 import StoreApp.StoreApp.service.CategoryService;
@@ -173,20 +163,31 @@ public class AdminController {
 		return "redirect:" + referer;
 	}
 
-	@GetMapping("/delete-order/{id}")
-	public String DeleteOrder(@PathVariable int id, Model model, HttpServletRequest request) throws Exception {
+	@GetMapping("/approve-order/{id}")
+	public String approveOrder(@PathVariable int id, HttpServletRequest request) throws Exception {
 		User admin = (User) session.getAttribute("admin");
 		if (admin == null) {
 			return "redirect:/signin-admin";
 		} else {
 			String referer = request.getHeader("Referer");
 			Order order = orderService.findById(id);
-			System.out.println(order);
 			if (order != null) {
-				for (Order_Item y : order.getOrder_Item()) {
-					order_ItemService.deleteById(y.getId());
-				}
-				orderService.deleteById(id);
+				orderService.approveOrder(order.getId());
+			}
+			return "redirect:" + referer;
+		}
+	}
+
+	@GetMapping("/cancel-order/{id}")
+	public String cancelOrder(@PathVariable int id, HttpServletRequest request) throws Exception {
+		User admin = (User) session.getAttribute("admin");
+		if (admin == null) {
+			return "redirect:/signin-admin";
+		} else {
+			String referer = request.getHeader("Referer");
+			Order order = orderService.findById(id);
+			if (order != null) {
+				orderService.cancelOrder(order.getId());
 			}
 			return "redirect:" + referer;
 		}
@@ -199,8 +200,8 @@ public class AdminController {
 			return "redirect:/signin-admin";
 		} else {
 			List<Order> listOrder = orderService.findAll();
-			List<Order> listPaymentWithMomo = orderService.findAllByPayment_Method("Pay with ZaloPay");
-			List<Order> listPaymentOnDelivery = orderService.findAllByPayment_Method("Pay on Delivery");
+			List<Order> listPaymentWithMomo = orderService.findAllByPayment_Method("PayPal");
+			List<Order> listPaymentOnDelivery = orderService.findAllByPayment_Method("COD");
 			int TotalMomo = 0;
 			int TotalDelivery = 0;
 			for (Order y : listPaymentWithMomo) {

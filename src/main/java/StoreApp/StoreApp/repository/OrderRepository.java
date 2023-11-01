@@ -20,7 +20,6 @@ public interface OrderRepository extends JpaRepository<Order,Integer>{
 
 	void deleteById(int id);
 	
-	
 	@Query(value="select * from `order` o where o.payment_method = ?1 and o.user_id = ?2",nativeQuery = true)
 	List<Order> findAllByPayment_Method(String payment_Method, String user_id);
 	

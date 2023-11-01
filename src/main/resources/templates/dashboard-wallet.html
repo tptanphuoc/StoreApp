@@ -34,9 +34,6 @@
 
 						<!-- Logo -->
 						<div id="logo">
-							<a th:href="@{/redirect}"><img src="images/logo.png" alt=""></a>
-							<a th:href="@{/redirect}" class="dashboard-logo"><img
-								src="images/logo.png" alt=""></a>
 						</div>
 
 						<!-- Mobile Navigation -->
@@ -143,7 +140,7 @@
 							<div class="dashboard-stat-content wallet-totals">
 								<h4
 									th:text="${#numbers.formatDecimal(TotalMomo, 0, 'COMMA', 0, 'POINT')}"></h4>
-								<span>Payment with ZaloPay<strong class="wallet-currency">VNĐ</strong></span>
+								<span>Payment with PayPal<strong class="wallet-currency">VNĐ</strong></span>
 							</div>
 							<div class="dashboard-stat-icon">
 								<i class="im im-icon-Money-2"></i>

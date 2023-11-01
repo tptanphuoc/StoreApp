@@ -34,9 +34,6 @@
 
 						<!-- Logo -->
 						<div id="logo">
-							<a th:href="@{/redirect}"><img src="/images/logo2.png" alt=""></a>
-							<a th:href="@{/redirect}" class="dashboard-logo"><img
-								src="/images/logo2.png" alt=""></a>
 						</div>
 
 						<!-- Mobile Navigation -->
@@ -191,6 +188,15 @@
 														</ul>
 													</div>
 
+													<div class="inner-booking-list">
+														<h5>Status:</h5>
+														<ul class="booking-list">
+															<li th:if="${y.status == 'Approved'}" class="notification success" th:text="${y.status}"></li>
+															<li th:if="${y.status == 'Pending'}" class="notification notice" th:text="${y.status}"></li>
+															<li th:if="${y.status == 'Cancelled'}" class="notification error" th:text="${y.status}"></li>
+														</ul>
+													</div>
+
 													<!-- Reply to review popup -->
 													<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
 														<div class="small-dialog-header">
@@ -205,7 +211,6 @@
 															</form>
 														</div>
 													</div>
-
 													<a href="#small-dialog"
 														class="rate-review popup-with-zoom-anim"><i
 														class="sl sl-icon-envelope-open"></i> Send Message</a>
@@ -213,10 +218,17 @@
 											</div>
 										</div>
 										<div class="buttons-to-right">
-											<a th:href="@{/delete-order/{id}(id=${y.id})}" class="button gray reject"><i
-												class="sl sl-icon-close"></i> Delete</a> <a
-												th:href="@{/dashboard-invoice/{id}(id=${y.id})}"
-												class="button gray approve"><i class="im im-icon-Coin"></i>
+											<a th:href="@{/approve-order/{id}(id=${y.id})}" class="button gray approve"
+											   th:if="${y.status != 'Approved'}">
+												<i class="sl sl-icon-check"></i> Approve order
+											</a>
+											<a th:href="@{/cancel-order/{id}(id=${y.id})}" class="button gray reject"
+											   th:if="${y.status != 'Cancelled'}">
+												<i class="sl sl-icon-close"></i> Cancel order
+											</a>
+											<a
+												th:href="@{/dashboard-invoice/{id}(id=${y.id})}" class="button gray notice"><i
+												class="im im-icon-Coin"></i>
 												View Invoice</a>
 										</div>
 									</li>

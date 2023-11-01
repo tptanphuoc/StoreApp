@@ -18,6 +18,8 @@ public interface OrderService {
 	List<Order> findAll();
 
 	Page<Order> findAll(Pageable pageable);
+	void approveOrder(int orderId);
+	void cancelOrder(int orderId);
 
 	void deleteById(int id);
 
